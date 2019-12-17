@@ -1,10 +1,18 @@
 <template lang="html">
-  <v-container fluid>
+  <v-container fluid class="pt-0">
     <v-row>
       <v-col xs="12" md="6" lg="4">
         <v-alert v-if="error" color="error">
           {{ error.message || error }}
         </v-alert>
+        <v-row class="mb-2">
+          <v-spacer />
+          <v-btn class="mx-2" fab dark small color="primary" @click="fetchSchema">
+            <v-icon dark>
+              mdi-refresh
+            </v-icon>
+          </v-btn>
+        </v-row>
         <v-jsonschema-form v-if="schema && editConfig" :schema="schema" :model="editConfig" :options="{context: {owner: dataFair.owner}}" @error="error => error = error" />
         <v-row class="mt-2">
           <v-spacer />
@@ -17,7 +25,17 @@
         </v-row>
       </v-col>
       <v-col xs="12" md="6" lg="8">
-        <v-iframe v-if="showPreview" src="http://localhost:5889" />
+        <v-row class="mb-2">
+          <v-spacer />
+          <v-btn class="mx-2" fab dark small color="primary" @click="reloadIframe">
+            <v-icon dark>
+              mdi-refresh
+            </v-icon>
+          </v-btn>
+        </v-row>
+        <v-card>
+          <v-iframe v-if="showPreview" src="http://localhost:5888/app" />
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -51,20 +69,26 @@ export default {
   }),
   async created() {
     this.dataFair = process.env.dataFair
-    this.schema = await this.$axios.$get('http://localhost:5889/config-schema.json')
     this.editConfig = await this.$axios.$get('http://localhost:5888/config')
+    this.fetchSchema()
   },
   methods: {
     async empty() {
-      this.showPreview = false
       this.editConfig = null
-      await new Promise(resolve => setTimeout(resolve, 100))
+      await this.save({})
       this.editConfig = {}
-      this.showPreview = true
     },
     async save(config) {
-      this.showPreview = false
       await this.$axios.$put('http://localhost:5888/config', config)
+      await this.reloadIframe()
+    },
+    async fetchSchema() {
+      this.schema = null
+      this.schema = await this.$axios.$get(`${process.env.app.url}/config-schema.json`)
+    },
+    async reloadIframe() {
+      this.showPreview = false
+      await new Promise(resolve => setTimeout(resolve, 10))
       this.showPreview = true
     }
   }

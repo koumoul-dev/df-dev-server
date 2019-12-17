@@ -1,11 +1,12 @@
 module.exports = {
   dataFair: {
-    domain: 'DATAFAIR_DOMAIN',
-    path: 'DATAFAIR_PATH',
+    url: 'DATAFAIR_URL',
     owner: {
       type: 'DATAFAIR_OWNER_TYPE',
       id: 'DATAFAIR_OWNER_ID'
     }
   },
-  targetDirectory: 'TARGET_DIRECTORY'
+  app: {
+    url: 'APP_URL'
+  }
 }

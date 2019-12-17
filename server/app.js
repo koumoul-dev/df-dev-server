@@ -7,16 +7,17 @@ const config = require('config')
 const eventToPromise = require('event-to-promise')
 const http = require('http')
 const fs = require('fs-extra')
-const bs = require('browser-sync').create()
 const proxy = require('http-proxy-middleware')
 const cors = require('cors')
 const open = require('open')
 const { Nuxt, Builder } = require('nuxt')
 
 const app = express()
+const server = http.createServer(app)
 app.use(bodyParser.json())
 app.use(cors())
 
+// very basic CRUD of config
 app.get('/config', (req, res, next) => {
   res.send(fs.existsSync('.dev-config.json') ? fs.readJsonSync('.dev-config.json') : {})
 })
@@ -29,51 +30,50 @@ app.post('/config/error', (req, res) => {
   res.send()
 })
 
+// re-expose the application performing similar modifications to the body as data-fair
+const appUrl = new URL(config.app.url)
+app.use('/app', proxy({
+  target: appUrl.origin,
+  pathRewrite: { '^/app': '' },
+  secure: false,
+  changeOrigin: true,
+  ws: true,
+  selfHandleResponse: true, // so that the onProxyRes takes care of sending the response
+  onProxyRes: function(proxyRes, req, res) {
+    const configuration = fs.existsSync('.dev-config.json') ? fs.readJsonSync('.dev-config.json') : {}
+    let body = ''
+    proxyRes.on('data', (data) => { body += data.toString() })
+    proxyRes.on('end', () => {
+      body = body.toString()
+      res.end(body.replace(/%APPLICATION%/g, JSON.stringify({
+        configuration,
+        exposedUrl: 'http://localhost:5888/app',
+        href: 'http://localhost:5888/config'
+      })))
+    })
+  }
+}))
+
 // re-expose a data-fair instance to access datasets, etc.
+const dfUrl = new URL(config.dataFair.url)
 app.use('/data-fair', proxy({
-  target: config.dataFair.domain,
-  pathRewrite: { '^/data-fair': config.dataFair.path },
+  target: dfUrl.origin,
+  pathRewrite: { '^/data-fair': dfUrl.pathname },
   secure: false,
   changeOrigin: true,
   ws: true,
   logLevel: 'error'
 }))
 
-// livereload on the app source code
-bs.init({
-  server: config.targetDirectory,
-  files: [`${config.targetDirectory}/**/*.{html,js,css}`],
-  online: false,
-  open: false,
-  port: config.port + 1,
-  ui: false,
-  cors: true,
-  logLevel: 'silent',
-  middleware: [(req, res, next) => {
-    if (req.originalUrl === '/') {
-      const configuration = fs.existsSync('.dev-config.json') ? fs.readJsonSync('.dev-config.json') : {}
-      const index = fs.readFileSync(`${config.targetDirectory}/index.html`, 'utf8')
-      res.end(index.replace(/%APPLICATION%/g, JSON.stringify({
-        configuration,
-        exposedUrl: 'http://localhost:5889',
-        href: 'http://localhost:5888/config'
-      })))
-    } else {
-      next()
-    }
-  }]
-})
-
 // run the dev-src command from current project
 if (fs.existsSync('package.json')) {
   const pJson = fs.readJsonSync('package.json')
   if (pJson.scripts && pJson.scripts['dev-src']) {
-    spawn('npm', ['run', 'dev-src'], { stdio: 'inherit' })
+    spawn('npm', ['run', 'dev-src'], { stdio: 'inherit' }).on('error', () => {})
   }
 }
 
 // Run app and return it in a promise
-const server = http.createServer(app)
 exports.run = async () => {
   if (process.env.NODE_ENV === 'development') {
     const nuxtConfig = require('../nuxt.config.js')
@@ -86,7 +86,7 @@ exports.run = async () => {
   }
   server.listen(config.port)
   await eventToPromise(server, 'listening')
-  open('http://localhost:5888')
+  if (process.env.NODE_ENV !== 'development') open('http://localhost:5888')
   return server
 }
 

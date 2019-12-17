@@ -19,9 +19,7 @@ module.exports = {
       }
     }
   },
-  env: {
-    dataFair: config.dataFair
-  },
+  env: { app: config.app, dataFair: config.dataFair },
   head: {
     title: 'DataFair - Dev server',
     meta: [
