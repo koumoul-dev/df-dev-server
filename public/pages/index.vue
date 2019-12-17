@@ -84,7 +84,7 @@ export default {
     },
     async fetchSchema() {
       this.schema = null
-      this.schema = await this.$axios.$get(`${process.env.app.url}/config-schema.json`)
+      this.schema = await this.$axios.$get('http://localhost:5888/app/config-schema.json')
     },
     async reloadIframe() {
       this.showPreview = false
