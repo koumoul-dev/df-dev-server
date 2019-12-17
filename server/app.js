@@ -1,5 +1,6 @@
 // Express app for TaxMan own API and UI
 const path = require('path')
+const { spawn } = require('child_process')
 const express = require('express')
 const bodyParser = require('body-parser')
 const config = require('config')
@@ -60,6 +61,14 @@ bs.init({
   }]
 })
 
+// run the dev-src command from current project
+if (fs.existsSync('package.json')) {
+  const pJson = fs.readJsonSync('package.json')
+  if (pJson.scripts && pJson.scripts['dev-src']) {
+    spawn('npm', ['run', 'dev-src'], { stdio: 'inherit' })
+  }
+}
+
 // Run app and return it in a promise
 const server = http.createServer(app)
 exports.run = async () => {
@@ -70,7 +79,7 @@ exports.run = async () => {
     app.use(nuxt.render)
     await new Builder(nuxt).build()
   } else {
-    app.use(express.static(path.join__dirname, 'dist'))
+    app.use(express.static(path.join(__dirname, 'dist')))
   }
   server.listen(config.port)
   await eventToPromise(server, 'listening')

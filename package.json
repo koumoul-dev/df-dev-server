@@ -8,10 +8,9 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development TARGET_DIRECTORY=test-app nodemon server",
-    "generate": "nuxt generate",
-    "prepublish": "npm run lint && npm run generate",
-    "lint": "eslint --ext .js,.vue .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev-src": "echo 'Build sources...'",
+    "prepublish": "npm run lint && nuxt generate",
+    "lint": "eslint --ext .js,.vue ."
   },
   "repository": {
     "type": "git",
