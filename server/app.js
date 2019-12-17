@@ -72,6 +72,8 @@ if (fs.existsSync('package.json')) {
   const pJson = fs.readJsonSync('package.json')
   if (pJson.scripts && pJson.scripts['dev-src']) {
     spawnedDevSrc = spawn('npm', ['run', 'dev-src'], { stdio: 'inherit' }).on('error', () => {})
+  } else {
+    console.error('No script "dev-src" in package.json')
   }
 }
 
