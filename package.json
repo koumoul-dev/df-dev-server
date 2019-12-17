@@ -4,7 +4,7 @@
   "description": "A development server for optimal development experience of data-fair applications.",
   "main": "index.js",
   "bin": {
-    "df-dev-server": "server/index.js"
+    "df-dev-server": "node server/index.js"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development TARGET_DIRECTORY=test-app nodemon server",

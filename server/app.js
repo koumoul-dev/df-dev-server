@@ -1,4 +1,5 @@
 // Express app for TaxMan own API and UI
+const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
 const config = require('config')
@@ -69,7 +70,7 @@ exports.run = async () => {
     app.use(nuxt.render)
     await new Builder(nuxt).build()
   } else {
-    app.use(express.static('dist'))
+    app.use(express.static(path.join__dirname, 'dist'))
   }
   server.listen(config.port)
   await eventToPromise(server, 'listening')
