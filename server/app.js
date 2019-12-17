@@ -9,10 +9,13 @@ const http = require('http')
 const fs = require('fs-extra')
 const bs = require('browser-sync').create()
 const proxy = require('http-proxy-middleware')
+const cors = require('cors')
+const open = require('open')
 const { Nuxt, Builder } = require('nuxt')
 
 const app = express()
 app.use(bodyParser.json())
+app.use(cors())
 
 app.get('/config', (req, res, next) => {
   res.send(fs.existsSync('.dev-config.json') ? fs.readJsonSync('.dev-config.json') : {})
@@ -79,10 +82,11 @@ exports.run = async () => {
     app.use(nuxt.render)
     await new Builder(nuxt).build()
   } else {
-    app.use(express.static(path.join(__dirname, 'dist')))
+    app.use(express.static(path.join(__dirname, '..', 'dist')))
   }
   server.listen(config.port)
   await eventToPromise(server, 'listening')
+  open('http://localhost:5888')
   return server
 }
 

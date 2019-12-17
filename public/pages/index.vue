@@ -6,12 +6,12 @@
           {{ error.message || error }}
         </v-alert>
         <v-jsonschema-form v-if="schema && editConfig" :schema="schema" :model="editConfig" :options="{context: {owner: dataFair.owner}}" @error="error => error = error" />
-        <v-row>
+        <v-row class="mt-2">
           <v-spacer />
           <v-btn color="warning" @click="empty">
             Empty
           </v-btn>
-          <v-btn color="primary" class="ml-1" @click="save(editConfig)">
+          <v-btn color="primary" class="ml-1 mr-5" @click="save(editConfig)">
             Save
           </v-btn>
         </v-row>
