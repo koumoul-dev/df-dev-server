@@ -31,7 +31,7 @@ app.use('/data-fair', proxy({
   secure: false,
   changeOrigin: true,
   ws: true,
-  logLevel: 'debug'
+  logLevel: 'error'
 }))
 
 // livereload on the app source code
@@ -43,6 +43,7 @@ bs.init({
   port: config.port + 1,
   ui: false,
   cors: true,
+  logLevel: 'silent',
   middleware: [(req, res, next) => {
     if (req.originalUrl === '/') {
       const configuration = fs.existsSync('.dev-config.json') ? fs.readJsonSync('.dev-config.json') : {}
@@ -58,15 +59,18 @@ bs.init({
   }]
 })
 
-const nuxtConfig = require('../nuxt.config.js')
-nuxtConfig.dev = process.env.NODE_ENV === 'development'
-const nuxt = new Nuxt(nuxtConfig)
-app.use(nuxt.render)
-
 // Run app and return it in a promise
 const server = http.createServer(app)
 exports.run = async () => {
-  if (nuxtConfig.dev) await new Builder(nuxt).build()
+  if (process.env.NODE_ENV === 'development') {
+    const nuxtConfig = require('../nuxt.config.js')
+    nuxtConfig.dev = true
+    const nuxt = new Nuxt(nuxtConfig)
+    app.use(nuxt.render)
+    await new Builder(nuxt).build()
+  } else {
+    app.use(express.static('dist'))
+  }
   server.listen(config.port)
   await eventToPromise(server, 'listening')
   return server

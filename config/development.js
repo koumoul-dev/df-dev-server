@@ -1,3 +1,1 @@
-module.exports = {
-  targetDirectory: 'test-app'
-}
+module.exports = {}

@@ -7,7 +7,7 @@
     "df-dev-server": "server/index.js"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon server",
+    "dev": "cross-env NODE_ENV=development TARGET_DIRECTORY=test-app nodemon server",
     "generate": "nuxt generate",
     "prepublish": "npm run lint && npm run generate",
     "lint": "eslint --ext .js,.vue .",
@@ -28,16 +28,14 @@
   },
   "homepage": "https://github.com/koumoul-dev/df-dev-server#readme",
   "dependencies": {
-    "@koumoul/vuetify-jsonschema-form": "^0.36.0",
     "browser-sync": "^2.26.7",
     "config": "^3.2.4",
     "event-to-promise": "^0.8.0",
     "fs-extra": "^8.1.0",
-    "http-proxy-middleware": "^0.20.0",
-    "nuxt": "^2.11.0",
-    "vuetify": "^2.1.14"
+    "http-proxy-middleware": "^0.20.0"
   },
   "devDependencies": {
+    "@koumoul/vuetify-jsonschema-form": "^0.36.0",
     "@koumoul/v-iframe": "^0.2.3",
     "@nuxtjs/axios": "^5.8.0",
     "@nuxtjs/vuetify": "^1.9.1",
@@ -54,6 +52,8 @@
     "eslint-plugin-vue": "^6.0.1",
     "eslint-plugin-vuetify": "^1.0.0-beta.5",
     "iframe-resizer": "^4.2.8",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "nuxt": "^2.11.0",
+    "vuetify": "^2.1.14"
   }
 }
