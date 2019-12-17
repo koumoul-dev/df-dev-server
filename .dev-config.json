@@ -1,9 +1,0 @@
-{
-  "datasets": [
-    {
-      "href": "https://koumoul.com/s/data-fair/api/v1/datasets/jep-2018-france",
-      "title": "Journées européennes du patrimoine en France Métropolitaine",
-      "page": "https://koumoul.com/s/data-fair/dataset/jep-2018-france/description"
-    }
-  ]
-}
