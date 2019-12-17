@@ -1,0 +1,28 @@
+body {
+  font-family: 'Nunito', sans-serif;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #FAFAFA;
+  text-align: center;
+}
+h1 {
+  font-size: 45px;
+  font-weight: 500;
+}
+#log li {
+  list-style-type: none;
+  font-style: italic;
+  padding: 8px;
+  text-align: left;
+}
+
+#log li.error {
+  color: red;
+}
+
+#log li.success {
+  color: green;
+}
+
+#actions * {
+  margin: 8px;
+}

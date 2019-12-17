@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <!-- The next 3 elements are important metadatas. They will be used by data-fair when importing this application. -->
+    <title>Data-Fair - minimal</title>
+    <meta name="description" content="This is the smallest valid data-fair application. It is meant as a presentation of what an application should do to interact with a data-fair instance.">
+    <meta name="application-name" content="data-fair-minimal">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito" />
+    <link rel="stylesheet" type="text/css" href="http://localhost:5889/style.css" />
+  </head>
+  <body>
+    <h1>Data-Fair - minimal</h1>
+    <p>This is the smallest valid data-fair application. It is meant as a presentation of what an application should do to interact with a data-fair instance.</p>
+    <h2>Logs</h2>
+    <ul id="log"></ul>
+
+    <!-- jQuery and other small libraries for code clarity -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <script>
+      // %APPLICATION% will be replaced by data-fair's reverse proxy with an object
+      // this replacement will only be done in HTML files, not external JS source code
+      // so you must use a script tag as this one
+      window.APPLICATION = %APPLICATION%;
+    </script>
+
+    <script src="http://localhost:5889/index.js"></script>
+  </body>
+</html>

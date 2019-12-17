@@ -1,0 +1,56 @@
+{
+  "name": "df-dev-server",
+  "version": "0.0.0",
+  "description": "A development server for optimal development experience of data-fair applications.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon server",
+    "generate": "nuxt generate",
+    "prepublish": "npm run lint && npm run generate",
+    "lint": "eslint --ext .js,.vue .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koumoul-dev/df-dev-server.git"
+  },
+  "keywords": [
+    "data-fair",
+    "dev"
+  ],
+  "author": "Alban Mouton <alban.mouton@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/koumoul-dev/df-dev-server/issues"
+  },
+  "homepage": "https://github.com/koumoul-dev/df-dev-server#readme",
+  "dependencies": {
+    "@koumoul/vuetify-jsonschema-form": "^0.36.0",
+    "browser-sync": "^2.26.7",
+    "config": "^3.2.4",
+    "event-to-promise": "^0.8.0",
+    "fs-extra": "^8.1.0",
+    "http-proxy-middleware": "^0.20.0",
+    "nuxt": "^2.11.0",
+    "vuetify": "^2.1.14"
+  },
+  "devDependencies": {
+    "@koumoul/v-iframe": "^0.2.3",
+    "@nuxtjs/axios": "^5.8.0",
+    "@nuxtjs/vuetify": "^1.9.1",
+    "babel-eslint": "^10.0.3",
+    "cross-env": "^6.0.3",
+    "eslint": "^6.7.2",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^6.0.1",
+    "eslint-plugin-vuetify": "^1.0.0-beta.5",
+    "iframe-resizer": "^4.2.8",
+    "nodemon": "^2.0.2"
+  }
+}
