@@ -1,5 +1,5 @@
 {
-  "name": "df-dev-server",
+  "name": "@koumoul/df-dev-server",
   "version": "0.0.0",
   "description": "A development server for optimal development experience of data-fair applications.",
   "main": "index.js",
