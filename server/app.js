@@ -11,7 +11,6 @@ const proxy = require('http-proxy-middleware')
 const cors = require('cors')
 const open = require('open')
 const kill = require('tree-kill')
-const { Nuxt, Builder } = require('nuxt')
 
 const app = express()
 const server = http.createServer(app)
@@ -80,6 +79,7 @@ if (fs.existsSync('package.json')) {
 // Run app and return it in a promise
 exports.run = async () => {
   if (process.env.NODE_ENV === 'development') {
+    const { Nuxt, Builder } = require('nuxt')
     const nuxtConfig = require('../nuxt.config.js')
     nuxtConfig.dev = true
     const nuxt = new Nuxt(nuxtConfig)
