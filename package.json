@@ -32,7 +32,8 @@
     "event-to-promise": "^0.8.0",
     "fs-extra": "^8.1.0",
     "http-proxy-middleware": "^0.20.0",
-    "open": "^7.0.0"
+    "open": "^7.0.0",
+    "tree-kill": "^1.2.2"
   },
   "devDependencies": {
     "@koumoul/v-iframe": "^0.2.3",

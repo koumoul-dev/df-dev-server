@@ -10,6 +10,7 @@ const fs = require('fs-extra')
 const proxy = require('http-proxy-middleware')
 const cors = require('cors')
 const open = require('open')
+const kill = require('tree-kill')
 const { Nuxt, Builder } = require('nuxt')
 
 const app = express()
@@ -66,10 +67,11 @@ app.use('/data-fair', proxy({
 }))
 
 // run the dev-src command from current project
+let spawnedDevSrc
 if (fs.existsSync('package.json')) {
   const pJson = fs.readJsonSync('package.json')
   if (pJson.scripts && pJson.scripts['dev-src']) {
-    spawn('npm', ['run', 'dev-src'], { stdio: 'inherit' }).on('error', () => {})
+    spawnedDevSrc = spawn('npm', ['run', 'dev-src'], { stdio: 'inherit' }).on('error', () => {})
   }
 }
 
@@ -91,6 +93,7 @@ exports.run = async () => {
 }
 
 exports.stop = async() => {
+  if (spawnedDevSrc) kill(spawnedDevSrc.pid)
   server.close()
   await eventToPromise(server, 'close')
   await app.get('client').close()
