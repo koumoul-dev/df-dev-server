@@ -34,7 +34,7 @@
           </v-btn>
         </v-row>
         <v-card>
-          <v-iframe v-if="showPreview" src="http://localhost:5888/app" />
+          <v-iframe v-if="showPreview" src="http://localhost:5888/app?draft=rue" />
         </v-card>
       </v-col>
     </v-row>

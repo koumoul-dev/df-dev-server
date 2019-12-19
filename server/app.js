@@ -41,11 +41,14 @@ app.use('/app', proxy({
   ws: true,
   selfHandleResponse: true, // so that the onProxyRes takes care of sending the response
   onProxyRes (proxyRes, req, res) {
+    res.writeHead(proxyRes.statusCode, proxyRes.headers)
     const configuration = fs.existsSync('.dev-config.json') ? fs.readJsonSync('.dev-config.json') : {}
     let body = ''
     proxyRes.on('data', (data) => { body += data.toString() })
     proxyRes.on('end', () => {
       res.end(body.replace(/%APPLICATION%/g, JSON.stringify({
+        id: 'dev-application',
+        title: 'Dev application',
         configuration,
         exposedUrl: 'http://localhost:5888/app',
         href: 'http://localhost:5888/config',
@@ -70,6 +73,7 @@ app.use('/data-fair', proxy({
     proxyReq.setHeader('accept-encoding', 'identity')
   },
   onProxyRes (proxyRes, req, res) {
+    res.writeHead(proxyRes.statusCode, proxyRes.headers)
     if (proxyRes.headers['content-type'] && proxyRes.headers['content-type'].startsWith('application/json')) {
       let body = ''
       proxyRes.on('data', (data) => { body += data.toString() })
@@ -79,8 +83,7 @@ app.use('/data-fair', proxy({
         res.end(body.replace(new RegExp(escapeStringRegexp(config.dataFair.url), 'g'), 'http://localhost:5888/data-fair'))
       })
     } else {
-      proxyRes.on('data', (data) => res.write(data))
-      proxyRes.on('end', () => res.end())
+      proxyRes.pipe(res)
     }
   }
 }))
