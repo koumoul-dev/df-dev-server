@@ -48,7 +48,9 @@ app.use('/app', proxy({
       res.end(body.replace(/%APPLICATION%/g, JSON.stringify({
         configuration,
         exposedUrl: 'http://localhost:5888/app',
-        href: 'http://localhost:5888/config'
+        href: 'http://localhost:5888/config',
+        apiUrl: config.dataFair.url + '/api/v1',
+        wsUrl: config.dataFair.url.replace('https://', 'wss://').replace('http://', 'ws://')
       })))
     })
   }
