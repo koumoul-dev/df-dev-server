@@ -54,7 +54,8 @@ app.use('/app', proxy({
         apiUrl: 'http://localhost:5888/data-fair/api/v1',
         wsUrl: 'ws://localhost:5888/data-fair'
       }))
-      proxyRes.headers['content-length'] = output.length
+      // proxyRes.headers['content-length'] = output.length
+      delete proxyRes.headers['content-length']
       res.writeHead(proxyRes.statusCode, proxyRes.headers)
       res.end(output)
     })
@@ -80,7 +81,8 @@ app.use('/data-fair', proxy({
       proxyRes.on('data', (data) => { body += data.toString() })
       proxyRes.on('end', () => {
         const output = body.replace(new RegExp(escapeStringRegexp(config.dataFair.url), 'g'), 'http://localhost:5888/data-fair')
-        proxyRes.headers['content-length'] = output.length
+        // proxyRes.headers['content-length'] = output.length
+        delete proxyRes.headers['content-length']
         res.writeHead(proxyRes.statusCode, proxyRes.headers)
         // make all references to data-fair url point to local proxy
         res.end(output)
