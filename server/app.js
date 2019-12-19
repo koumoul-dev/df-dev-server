@@ -11,6 +11,7 @@ const proxy = require('http-proxy-middleware')
 const cors = require('cors')
 const open = require('open')
 const kill = require('tree-kill')
+const escapeStringRegexp = require('escape-string-regexp')
 
 const app = express()
 const server = http.createServer(app)
@@ -39,12 +40,11 @@ app.use('/app', proxy({
   changeOrigin: true,
   ws: true,
   selfHandleResponse: true, // so that the onProxyRes takes care of sending the response
-  onProxyRes: function(proxyRes, req, res) {
+  onProxyRes (proxyRes, req, res) {
     const configuration = fs.existsSync('.dev-config.json') ? fs.readJsonSync('.dev-config.json') : {}
     let body = ''
     proxyRes.on('data', (data) => { body += data.toString() })
     proxyRes.on('end', () => {
-      body = body.toString()
       res.end(body.replace(/%APPLICATION%/g, JSON.stringify({
         configuration,
         exposedUrl: 'http://localhost:5888/app',
@@ -64,7 +64,25 @@ app.use('/data-fair', proxy({
   secure: false,
   changeOrigin: true,
   ws: true,
-  logLevel: 'error'
+  selfHandleResponse: true, // so that the onProxyRes takes care of sending the response
+  onProxyReq(proxyReq) {
+    // no gzip so that we can process the content
+    proxyReq.setHeader('accept-encoding', 'identity')
+  },
+  onProxyRes (proxyRes, req, res) {
+    if (proxyRes.headers['content-type'] && proxyRes.headers['content-type'].startsWith('application/json')) {
+      let body = ''
+      proxyRes.on('data', (data) => { body += data.toString() })
+      proxyRes.on('end', () => {
+        body = body.toString()
+        // make all references to data-fair url point to local proxy
+        res.end(body.replace(new RegExp(escapeStringRegexp(config.dataFair.url), 'g'), 'http://localhost:5888/data-fair'))
+      })
+    } else {
+      proxyRes.on('data', (data) => res.write(data))
+      proxyRes.on('end', () => res.end())
+    }
+  }
 }))
 
 // run the dev-src command from current project
