@@ -49,8 +49,8 @@ app.use('/app', proxy({
         configuration,
         exposedUrl: 'http://localhost:5888/app',
         href: 'http://localhost:5888/config',
-        apiUrl: config.dataFair.url + '/api/v1',
-        wsUrl: config.dataFair.url.replace('https://', 'wss://').replace('http://', 'ws://')
+        apiUrl: 'http://localhost:5888/data-fair/api/v1',
+        wsUrl: 'ws://localhost:5888/data-fair'
       })))
     })
   }
