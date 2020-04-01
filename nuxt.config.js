@@ -1,4 +1,9 @@
-const config = require('config')
+let config = require('config')
+
+if (process.argv.slice(-1)[0] === 'generate') {
+  const nuxtConfigInject = require('@koumoul/nuxt-config-inject')
+  config = nuxtConfigInject.prepare(config)
+}
 
 module.exports = {
   mode: 'spa',

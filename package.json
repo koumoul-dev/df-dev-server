@@ -2,7 +2,7 @@
   "name": "@koumoul/df-dev-server",
   "version": "0.1.19",
   "description": "A development server for optimal development experience of data-fair applications.",
-  "main": "index.js",
+  "main": "server/index.js",
   "bin": {
     "df-dev-server": "server/index.js"
   },
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/koumoul-dev/df-dev-server#readme",
   "dependencies": {
+    "@koumoul/nuxt-config-inject": "^0.4.4",
     "body-parser": "^1.19.0",
     "chalk": "^3.0.0",
     "config": "^3.2.4",

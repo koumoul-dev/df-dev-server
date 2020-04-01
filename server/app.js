@@ -115,7 +115,13 @@ exports.run = async () => {
     app.use(nuxt.render)
     await new Builder(nuxt).build()
   } else {
-    app.use(express.static(path.join(__dirname, '..', 'dist')))
+    const nuxtConfigInject = require('@koumoul/nuxt-config-inject')
+    const distOrigin = path.join(__dirname, '..', 'dist')
+    const distConfig = path.join(__dirname, '..', 'dist-config')
+    await fs.remove(distConfig)
+    await fs.copy(distOrigin, distConfig)
+    nuxtConfigInject.replace(config, [distConfig + '/**/*'])
+    app.use(express.static(distConfig))
   }
   server.listen(config.port)
   await eventToPromise(server, 'listening')
