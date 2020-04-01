@@ -1,6 +1,6 @@
 {
   "name": "@koumoul/df-dev-server",
-  "version": "0.1.19",
+  "version": "0.2.0",
   "description": "A development server for optimal development experience of data-fair applications.",
   "main": "server/index.js",
   "bin": {
