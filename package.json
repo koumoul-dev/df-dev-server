@@ -28,6 +28,7 @@
   "homepage": "https://github.com/koumoul-dev/df-dev-server#readme",
   "dependencies": {
     "@koumoul/nuxt-config-inject": "^0.4.4",
+    "@koumoul/vjsf": "^1.0.1",
     "body-parser": "^1.19.0",
     "chalk": "^3.0.0",
     "config": "^3.2.4",
@@ -42,7 +43,6 @@
   },
   "devDependencies": {
     "@koumoul/v-iframe": "^0.2.3",
-    "@koumoul/vuetify-jsonschema-form": "^0.36.0",
     "@nuxtjs/axios": "^5.8.0",
     "@nuxtjs/vuetify": "^1.9.1",
     "babel-eslint": "^10.0.3",

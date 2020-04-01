@@ -13,7 +13,7 @@
             </v-icon>
           </v-btn>
         </v-row>
-        <v-jsonschema-form v-if="schema && editConfig" :schema="schema" :model="editConfig" :options="{context: {owner: dataFair.owner}}" @error="error => error = error" />
+        <v-jsf v-if="schema && editConfig" v-model="editConfig" :schema="schema" :options="{context: {owner: dataFair.owner}}" @error="error => error = error" />
         <v-row class="mt-2">
           <v-spacer />
           <v-btn color="warning" @click="empty">
@@ -42,24 +42,18 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import VJsonschemaForm from '@koumoul/vuetify-jsonschema-form/lib/index.vue'
-import '@koumoul/vuetify-jsonschema-form/dist/main.css'
+
+import VJsf from '@koumoul/vjsf/lib/VJsf.js'
+import '@koumoul/vjsf/lib/VJsf.css'
+// load third-party dependencies for vjsf (markdown-it, vuedraggable)
+// you can also load them separately based on your needs
+import '@koumoul/vjsf/lib/deps/third-party.js'
+
 import 'iframe-resizer/js/iframeResizer'
 import VIframe from '@koumoul/v-iframe'
 
-if (process.browser) {
-  const Swatches = require('vue-swatches').default
-  Vue.component('swatches', Swatches)
-  require('vue-swatches/dist/vue-swatches.min.css')
-  const Draggable = require('vuedraggable')
-  Vue.component('draggable', Draggable)
-  const Sketch = require('vue-color').Sketch
-  Vue.component('color-picker', Sketch)
-}
-
 export default {
-  components: { VIframe, VJsonschemaForm },
+  components: { VIframe, VJsf },
   data: () => ({
     error: null,
     schema: null,
@@ -85,6 +79,7 @@ export default {
     async fetchSchema() {
       this.schema = null
       this.schema = await this.$axios.$get('http://localhost:5888/app/config-schema.json')
+      this.schema['x-display'] = 'tabs'
     },
     async reloadIframe() {
       this.showPreview = false
