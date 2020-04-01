@@ -13,13 +13,15 @@
             </v-icon>
           </v-btn>
         </v-row>
-        <v-jsf v-if="schema && editConfig" v-model="editConfig" :schema="schema" :options="{context: {owner: dataFair.owner}}" @error="error => error = error" />
+        <v-form ref="form">
+          <v-jsf v-if="schema && editConfig" v-model="editConfig" :schema="schema" :options="{context: {owner: dataFair.owner}}" @error="error => error = error" />
+        </v-form>
         <v-row class="mt-2">
           <v-spacer />
           <v-btn color="warning" @click="empty">
             Empty
           </v-btn>
-          <v-btn color="primary" class="ml-1 mr-5" @click="save(editConfig)">
+          <v-btn color="primary" class="ml-1 mr-5" @click="validate">
             Save
           </v-btn>
         </v-row>
@@ -71,6 +73,12 @@ export default {
       this.editConfig = null
       await this.save({})
       this.editConfig = {}
+    },
+    async validate() {
+      if (this.$refs.form.validate()) {
+        console.log('VALID')
+        this.save(this.editConfig)
+      }
     },
     async save(config) {
       await this.$axios.$put('http://localhost:5888/config', config)
