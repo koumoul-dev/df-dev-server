@@ -2,3 +2,4 @@ test-app
 public
 .nuxt
 .dev-config.json
+dist-config
