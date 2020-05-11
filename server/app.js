@@ -40,10 +40,6 @@ app.use('/app', proxy({
   changeOrigin: true,
   ws: true,
   selfHandleResponse: true, // so that the onProxyRes takes care of sending the response
-  onProxyReq (proxyReq, req, res) {
-    proxyReq.setHeader('cookie', '')
-    if (config.dataFair.apiIKey) proxyReq.setHeader('x-apiKey', config.dataFair.apiIKey)
-  },
   onProxyRes (proxyRes, req, res) {
     const configuration = fs.existsSync('.dev-config.json') ? fs.readJsonSync('.dev-config.json') : {}
     let body = ''
@@ -78,6 +74,8 @@ app.use('/data-fair', proxy({
   onProxyReq(proxyReq) {
     // no gzip so that we can process the content
     proxyReq.setHeader('accept-encoding', 'identity')
+    proxyReq.setHeader('cookie', '')
+    if (config.dataFair.apiIKey) proxyReq.setHeader('x-apiKey', config.dataFair.apiIKey)
   },
   onProxyRes (proxyRes, req, res) {
     if (proxyRes.headers['content-type'] && proxyRes.headers['content-type'].startsWith('application/json')) {
