@@ -5,7 +5,8 @@ module.exports = {
     owner: {
       type: 'organization',
       id: '5a5dc47163ebd4a6f438589b'
-    }
+    },
+    apiKey: null
   },
   app: {
     url: 'http://localhost:3000'
