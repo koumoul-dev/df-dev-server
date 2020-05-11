@@ -75,7 +75,7 @@ app.use('/data-fair', proxy({
     // no gzip so that we can process the content
     proxyReq.setHeader('accept-encoding', 'identity')
     proxyReq.setHeader('cookie', '')
-    if (config.dataFair.apiIKey) proxyReq.setHeader('x-apiKey', config.dataFair.apiIKey)
+    if (config.dataFair.apiKey) proxyReq.setHeader('x-apiKey', config.dataFair.apiKey)
   },
   onProxyRes (proxyRes, req, res) {
     if (proxyRes.headers['content-type'] && proxyRes.headers['content-type'].startsWith('application/json')) {
