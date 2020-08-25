@@ -3,7 +3,7 @@
     $('<li class="' + (cls || 'info') + '">' + msg + '</li>').appendTo('#log')
   }
   function errorCallback(err) {
-    log(err.message || err.responseText || err.statusText || err, 'error')
+    log(err.message || err.responseText || err.statusText || err || 'error')
   }
 
   var application = window.APPLICATION
@@ -28,7 +28,7 @@
       url: application.href + '/error',
       dataType: 'json',
       contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({'message': 'This error was triggered by the application. In draft mode it can be used to provide feedback to user, in production it is used to diagnose broken configurations.'})
+      data: JSON.stringify({'message': 'This error was triggered by the application. In draft mode it is used to provide feedback to the user, in production it is used to diagnose broken configurations.'})
     }).then(function(data) {
       log('Sent error to application')
     })
