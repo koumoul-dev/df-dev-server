@@ -14,21 +14,19 @@
           </v-btn>
         </v-row>
         <v-form ref="form">
-          <v-jsf v-if="schema && editConfig" v-model="editConfig" :schema="schema" :options="{context: {owner: dataFair.owner}}" @error="error => error = error" />
+          <v-jsf v-if="schema && editConfig" v-model="editConfig" :schema="schema" :options="{context: {owner: dataFair.owner}}" @change="validate" />
         </v-form>
         <v-row class="mt-2">
           <v-spacer />
           <v-btn color="warning" @click="empty">
             Empty
           </v-btn>
-          <v-btn color="primary" class="ml-1 mr-5" @click="validate">
-            Save
-          </v-btn>
         </v-row>
       </v-col>
       <v-col xs="12" md="6" lg="8">
         <v-row class="mb-2">
           <v-spacer />
+          <screenshot-simulation />
           <v-btn class="mx-2" fab dark small color="primary" @click="reloadIframe">
             <v-icon dark>
               mdi-refresh
@@ -45,6 +43,7 @@
 
 <script>
 
+import ReconnectingWebSocket from 'reconnecting-websocket'
 import VJsf from '@koumoul/vjsf/lib/VJsf.js'
 import '@koumoul/vjsf/lib/VJsf.css'
 // load third-party dependencies for vjsf (markdown-it, vuedraggable)
@@ -53,9 +52,10 @@ import '@koumoul/vjsf/lib/deps/third-party.js'
 
 import 'iframe-resizer/js/iframeResizer'
 import VIframe from '@koumoul/v-iframe'
+import ScreenshotSimulation from '~/components/screenshot-simulation.vue'
 
 export default {
-  components: { VIframe, VJsf },
+  components: { VIframe, VJsf, ScreenshotSimulation },
   data: () => ({
     error: null,
     schema: null,
@@ -68,6 +68,30 @@ export default {
     this.editConfig = await this.$axios.$get('http://localhost:5888/config')
     this.fetchSchema()
   },
+  mounted() {
+    console.log('connect to to ws://localhost:5888')
+    this.socketDevServer = new ReconnectingWebSocket('ws://localhost:5888')
+    this.socketDevServer.onopen = () => {
+      this.socketDevServer.onmessage = (event) => {
+        const data = JSON.parse(event.data)
+        if (data.type === 'app-error') {
+          this.error = data.data.message
+        }
+        if (data.type === 'ping') {
+          this.socketDevServer.send(JSON.stringify({ type: 'pong' }))
+        }
+      }
+    }
+
+    /* const socketApp = new WebSocket('ws://localhost:3000')
+    socketApp.onmessage = (event) => {
+      console.log('ws message from 5888', event.data)
+    } */
+  },
+  destroyed() {
+    console.log('destroyed')
+    if (this.socketDevServer) this.socketDevServer.close()
+  },
   methods: {
     async empty() {
       this.editConfig = null
@@ -76,8 +100,8 @@ export default {
     },
     async validate() {
       if (this.$refs.form.validate()) {
-        console.log('VALID')
         this.save(this.editConfig)
+        this.error = null
       }
     },
     async save(config) {

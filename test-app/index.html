@@ -11,10 +11,13 @@
     <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css" />
   </head>
   <body>
-    <h1>Data-Fair - minimal</h1>
+    <h1 style="margin-top: 0; margin-bottom: 0;">Data-Fair - minimal</h1>
     <p>This is the smallest valid data-fair application. It is meant as a presentation of what an application should do to interact with a data-fair instance.</p>
-    <h2>Logs</h2>
+    <h2 id="actions-title">Actions</h2>
+    <button id="error-trigger">Trigger error</button>
+    <h2 id="log-title">Logs</h2>
     <ul id="log"></ul>
+    <p id="animation"></p>
 
     <!-- jQuery and other small libraries for code clarity -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
