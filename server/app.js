@@ -26,7 +26,7 @@ wss.on('connection', (_ws) => {
   ws = _ws
 
   ws.on('message', function incoming(message) {
-    console.log('received: %s', message)
+    if (!message.type || message.type !== 'pong') console.log('received: %s', message)
   })
   ws.send(JSON.stringify({ type: 'ping' }))
 })
