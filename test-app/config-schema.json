@@ -12,6 +12,7 @@
         "x-itemTitle": "title",
         "x-itemKey": "href",
         "properties": {
+          "id": {"type": "string"},
           "href": {"type": "string"},
           "title": {"type": "string"},
           "page": {"type": "string"}
