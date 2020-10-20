@@ -34,6 +34,12 @@
     })
   })
 
+  var configTriggerNb = 0
+  $('#set-config-trigger').on('click', function() {
+    configTriggerNb += 1
+    window.parent.postMessage({ type: 'set-config', content: { field: 'field1', value: 'Field 1, value ' + configTriggerNb } }, '*')
+  })
+
   // check that we are in a screenshot capture context
   if (window.triggerCapture) {
     // preparing a slightly different rendering for screenshot might be a good idea

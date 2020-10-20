@@ -49,6 +49,7 @@ import '@koumoul/vjsf/lib/VJsf.css'
 // load third-party dependencies for vjsf (markdown-it, vuedraggable)
 // you can also load them separately based on your needs
 import '@koumoul/vjsf/lib/deps/third-party.js'
+import dotProp from 'dot-prop'
 
 import 'iframe-resizer/js/iframeResizer'
 import VIframe from '@koumoul/v-iframe'
@@ -82,6 +83,13 @@ export default {
         }
       }
     }
+
+    window.addEventListener('message', msg => {
+      console.log('received message from iframe', msg.data)
+      if (msg.data.type === 'set-config') {
+        this.editConfig = dotProp.set({ ...this.editConfig }, msg.data.content.field, msg.data.content.value)
+      }
+    })
 
     /* const socketApp = new WebSocket('ws://localhost:3000')
     socketApp.onmessage = (event) => {
