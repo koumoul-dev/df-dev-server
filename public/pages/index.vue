@@ -14,7 +14,7 @@
           </v-btn>
         </v-row>
         <v-form ref="form">
-          <v-jsf v-if="schema && editConfig" v-model="editConfig" :schema="schema" :options="{context: {owner: dataFair.owner}}" @change="validate" />
+          <v-jsf v-if="schema && editConfig" v-model="editConfig" :schema="schema" :options="options" @change="validate" />
         </v-form>
         <v-row class="mt-2">
           <v-spacer />
@@ -64,6 +64,27 @@ export default {
     editConfig: null,
     showPreview: true
   }),
+  computed: {
+    options() {
+      // same as application-config.vue in data-fair
+      return {
+        context: { owner: this.dataFair && this.dataFair.owner },
+        locale: 'fr',
+        rootDisplay: 'expansion-panels',
+        // rootDisplay: 'tabs',
+        expansionPanelsProps: {
+          value: 0,
+          hover: true
+        },
+        dialogProps: {
+          maxWidth: 500,
+          overlayOpacity: 0 // better when inside an iframe
+        },
+        arrayItemCardProps: { outlined: true, tile: true },
+        dialogCardProps: { outlined: true }
+      }
+    }
+  },
   async created() {
     this.dataFair = process.env.dataFair
     this.editConfig = await this.$axios.$get('http://localhost:5888/config')
