@@ -65,6 +65,6 @@
     "nodemon": "^2.0.7",
     "nuxt": "^2.14.12",
     "reconnecting-websocket": "^4.4.0",
-    "vuetify": "^2.4.3"
+    "vuetify": "^2.4.11"
   }
 }

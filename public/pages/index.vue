@@ -1,5 +1,5 @@
 <template lang="html">
-  <v-container fluid class="pt-0">
+  <v-container fluid class="pt-4">
     <v-row>
       <v-col xs="12" md="6" lg="4">
         <v-alert v-if="error" color="error">
