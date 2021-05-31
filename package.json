@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server",
     "dev-src": "http-server test-app --port=3000 --cors --silent",
-    "prepublish": "npm run lint && nuxt generate",
+    "prepare": "npm run lint && nuxt generate",
     "lint": "eslint --ext .js,.vue ."
   },
   "repository": {
