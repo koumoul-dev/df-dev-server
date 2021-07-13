@@ -13,7 +13,14 @@
             </v-icon>
           </v-btn>
         </v-row>
-        <v-form ref="form">
+        <v-form ref="form" v-model="formValid">
+          <v-alert :value="!!compileError" type="error">
+            {{ compileError }}
+          </v-alert>
+          <v-alert :value="!!validationErrors && formValid" type="error">
+            Formulaire valide pourtant le modèle ne respecte pas le schéma:
+            <p>{{ validationErrors }}</p>
+          </v-alert>
           <v-jsf v-if="schema && editConfig" v-model="editConfig" :schema="schema" :options="options" @change="validate" />
         </v-form>
         <v-row class="mt-2">
@@ -55,6 +62,10 @@ import 'iframe-resizer/js/iframeResizer'
 import VIframe from '@koumoul/v-iframe'
 import ScreenshotSimulation from '~/components/screenshot-simulation.vue'
 
+const Ajv = require('ajv')
+const ajv = new Ajv()
+ajv.addFormat('hexcolor', /^#[0-9A-Fa-f]{6,8}$/)
+
 export default {
   components: { VIframe, VJsf, ScreenshotSimulation },
   data: () => ({
@@ -62,7 +73,9 @@ export default {
     schema: null,
     dataFair: null,
     editConfig: null,
-    showPreview: true
+    showPreview: true,
+    compileError: null,
+    formValid: false
   }),
   computed: {
     options() {
@@ -83,6 +96,11 @@ export default {
         arrayItemCardProps: { outlined: true, tile: true },
         dialogCardProps: { outlined: true }
       }
+    },
+    validationErrors() {
+      if (!this.schema) return
+      const valid = this.validate(this.editConfig)
+      return !valid && this.validate.errors
     }
   },
   async created() {
@@ -141,6 +159,12 @@ export default {
       this.schema = null
       this.schema = await this.$axios.$get('http://localhost:5888/app/config-schema.json')
       this.schema['x-display'] = 'tabs'
+      try {
+        this.validate = ajv.compile(this.schema)
+        this.compileError = null
+      } catch (err) {
+        this.compileError = err.message
+      }
     },
     async reloadIframe() {
       this.showPreview = false
