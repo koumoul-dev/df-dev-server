@@ -99,8 +99,8 @@ export default {
     },
     validationErrors() {
       if (!this.schema) return
-      const valid = this.validate(this.editConfig)
-      return !valid && this.validate.errors
+      const valid = this.schemaValidate(this.editConfig)
+      return !valid && this.schemaValidate.errors
     }
   },
   async created() {
@@ -160,7 +160,7 @@ export default {
       this.schema = await this.$axios.$get('http://localhost:5888/app/config-schema.json')
       this.schema['x-display'] = 'tabs'
       try {
-        this.validate = ajv.compile(this.schema)
+        this.schemaValidate = ajv.compile(this.schema)
         this.compileError = null
       } catch (err) {
         this.compileError = err.message
